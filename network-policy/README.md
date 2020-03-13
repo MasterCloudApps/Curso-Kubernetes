@@ -81,7 +81,7 @@ $ curl http://$HOST:$SA_PORT/servicebvalue-internal
 
 * ServiceB External Egress (direct)
 ```
-$ curl http://$HOST:$SA_PORT/externalvalue
+$ curl http://$HOST:$SA_PORT/servicebvalue-external
 ...0747532699...
 ```
 
