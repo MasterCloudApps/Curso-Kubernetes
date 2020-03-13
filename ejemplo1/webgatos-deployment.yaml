@@ -4,8 +4,6 @@ kind: Deployment
 metadata:
   name: webgatos-deploy
 spec:
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app: webgatos
