@@ -185,6 +185,12 @@ cilium-nhwl7                                0/1     Running   0          31s
 ...
 ```
 
+### Instalar Network policy plugin en Docker Desktop
+
+No he visto forma de hacerlo. Es posible que se pueda hacer en el futuro:
+
+https://github.com/cilium/cilium/issues/10516
+
 ### Volvemos a aplicar el Deny network policy
 
 Si hemos borrado el cluster y lo hemos regenerado de nuevo, tenemos que volver a desplegar los servicios:
