@@ -21,7 +21,7 @@ public class TablonController {
 		repository.save(new Anuncio("Juan", "Hola caracola", "XXXX"));
 	}
 
-	@GetMapping("/*/")
+	@GetMapping(value = {"/","/*/"})
 	public String tablon(Model model) {
 
 		model.addAttribute("anuncios", repository.findAll());
@@ -29,12 +29,12 @@ public class TablonController {
 		return "tablon";
 	}
 
-	@GetMapping("/*/nuevoAnuncio") 
+	@GetMapping(value = {"/nuevoAnuncio", "/*/nuevoAnuncio"}) 
 	public String nuevoAnuncioPage(){
 		return "nuevoAnuncio";
 	}
 
-	@PostMapping("/*/anuncio/nuevo")
+	@PostMapping(value = {"/anuncio/nuevo", "/*/anuncio/nuevo"})
 	public String nuevoAnuncio(Model model, Anuncio anuncio) {
 
 		repository.save(anuncio);
@@ -43,7 +43,7 @@ public class TablonController {
 
 	}
 
-	@GetMapping("/*/anuncio/{id}")
+	@GetMapping(value = {"/anuncio/{id}", "/*/anuncio/{id}"})
 	public String verAnuncio(Model model, @PathVariable long id) {
 		
 		Anuncio anuncio = repository.findOne(id);
