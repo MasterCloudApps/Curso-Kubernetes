@@ -4,7 +4,7 @@ docker pull codeurjc/webgatos:v1
 docker pull byrnedo/alpine-curl:0.1.7
 docker pull gcr.io/google-samples/node-hello:1.0
 docker pull mysql:5.6
-docker pull codeurjc/java-webapp-bbdd:v2
+docker pull codeurjc/java-webapp-bbdd:v3
 docker pull codeurjc/test-webserver:v1
 docker pull nginx:1.15
 docker pull codeurjc/hpa-example:v1
