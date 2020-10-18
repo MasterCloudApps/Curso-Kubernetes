@@ -1,5 +1,7 @@
 package es.codeurjc.test.tablonanuncios;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,14 @@ public class TablonController {
 
 	@PostConstruct
 	public void init() {
-		repository.save(new Anuncio("Pepe", "Hola caracola", "XXXX"));
-		repository.save(new Anuncio("Juan", "Hola caracola", "XXXX"));
+
+		if(repository.count() == 0){
+			repository.save(new Anuncio("Pepe", "Vendo Moto", "Barata, barata"));
+			repository.save(new Anuncio("Juan", "Compro coche", "Pago bien"));
+		}		
 	}
 
-	@GetMapping(value = {"/","/*/"})
+	@GetMapping("/")
 	public String tablon(Model model) {
 
 		model.addAttribute("anuncios", repository.findAll());
@@ -29,26 +34,27 @@ public class TablonController {
 		return "tablon";
 	}
 
-	@GetMapping(value = {"/nuevoAnuncio", "/*/nuevoAnuncio"}) 
+	@GetMapping("/nuevoAnuncio") 
 	public String nuevoAnuncioPage(){
-		return "nuevoAnuncio";
+		return "nuevo_anuncio";
 	}
 
-	@PostMapping(value = {"/anuncio/nuevo", "/*/anuncio/nuevo"})
+	@PostMapping("/anuncio/nuevo")
 	public String nuevoAnuncio(Model model, Anuncio anuncio) {
 
 		repository.save(anuncio);
 
 		return "anuncio_guardado";
-
 	}
 
-	@GetMapping(value = {"/anuncio/{id}", "/*/anuncio/{id}"})
+	@GetMapping("/anuncio/{id}")
 	public String verAnuncio(Model model, @PathVariable long id) {
 		
-		Anuncio anuncio = repository.findOne(id);
+		Optional<Anuncio> anuncio = repository.findById(id);
 
-		model.addAttribute("anuncio", anuncio);
+		if(anuncio.isPresent()){
+			model.addAttribute("anuncio", anuncio.get());
+		}
 
 		return "ver_anuncio";
 	}

@@ -1,0 +1,1 @@
+docker build -t codeurjc/webapp-db-java:v1 .

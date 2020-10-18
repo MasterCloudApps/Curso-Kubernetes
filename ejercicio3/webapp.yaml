@@ -13,12 +13,16 @@ spec:
     spec:
       containers:
       - name: java
-        image: codeurjc/java-webapp-bbdd:v3
+        image: codeurjc/webapp-db-java:v1
         env:
-        - name: MYSQL_ROOT_PASSWORD
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
           value: pass
-        - name: MYSQL_DATABASE
-          value: test
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://db/anuncios
+        - name: DATABASE_HOST
+          value: db        
 ---
 apiVersion: v1
 kind: Service

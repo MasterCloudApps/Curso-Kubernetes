@@ -1,0 +1,16 @@
+<html>
+<body>
+
+{{^anuncio}}
+Anuncio no encontrado.
+{{/anuncio}}
+
+{{#anuncio}}
+	<p>Nombre: {{nombre}}</p>
+	<p>Asunto: {{asunto}}</p>
+	<p>Comentario: {{comentario}}</p>
+{{/anuncio}}
+	
+	<a href="../">Volver al tablón</a>
+</body>
+</html>
