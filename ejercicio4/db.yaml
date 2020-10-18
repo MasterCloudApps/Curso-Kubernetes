@@ -6,35 +6,30 @@ spec:
   ports:
   - port: 3306
   selector:
-    app: mysql
+    app: db
   type: ClusterIP
 ---
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: mysql
+  name: db
 spec:
   selector:
     matchLabels:
-      app: mysql
-  strategy:
-    type: Recreate
+      app: db
   template:
     metadata:
       labels:
-        app: mysql
+        app: db
     spec:
       containers:
-      - image: mysql:5.6
-        name: mysql
+      - name: mysql
+        image: mysql:5.7
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: pass
         - name: MYSQL_DATABASE
-          value: test
-        ports:
-        - containerPort: 3306
-          name: mysql
+          value: anuncios
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
