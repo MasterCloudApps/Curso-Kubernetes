@@ -8,14 +8,14 @@ spec:
   rules:
    - http:
       paths:
-      - path: /anuncios/(.*)
+      - path: /anuncios(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
             name: webapp
             port:
               number: 8080
-      - path: /gatos/(.*)
+      - path: /gatos(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
