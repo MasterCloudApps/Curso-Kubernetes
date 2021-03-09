@@ -1,0 +1,10 @@
+web:
+  build: .
+  ports:
+    - 5000:5000
+  environment:
+    - MONGODB_HOST=db
+  links:
+    - db
+db:
+  image: mongo:4.4-bionic

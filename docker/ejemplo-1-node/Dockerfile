@@ -1,7 +1,7 @@
 # Selecciona la imagen base
 FROM node:lts-alpine
 
-# Especificamos esta variable para la correcta instalación de las librerías en modo de producción
+# Especificamos esta variable para la correcta ejecución de las librerías en modo de producción
 ENV NODE_ENV production
 
 # Definimos el directorio de trabajo en /usr/src/app/

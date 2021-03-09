@@ -27,11 +27,10 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 
 # Copiamos los ficheros de la aplicación
-COPY server.js /usr/src/app/
-COPY views/index.html /usr/src/app/views/
+COPY src /usr/src/app/src
 
 # Indica el puerto que expone el contenedor
 EXPOSE 5000
 
 # Comando que se ejecuta cuando se arranque el contenedor
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
