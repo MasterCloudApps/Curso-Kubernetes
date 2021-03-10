@@ -1,5 +1,5 @@
 # Python vitual env
 venv/
 
-# Database
-db/
+# Mongo database
+mongo/

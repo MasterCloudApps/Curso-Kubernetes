@@ -1,5 +1,5 @@
 # Node dependencies
 node_modules/
 
-# Database
-db/
+# Mongo database
+mongo/

@@ -11,4 +11,4 @@ services:
   db:
     image: mongo:4.4-bionic
     volumes:
-      - ./db:/data/db
+      - ./mongo:/data/db
