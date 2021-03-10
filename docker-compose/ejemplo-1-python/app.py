@@ -4,9 +4,15 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 
-client = MongoClient('db', 27017)
+dbHost = "localhost" if os.getenv("MONGODB_HOST") is None else os.getenv("MONGODB_HOST")
+dbPort = "27017" if os.getenv("MONGODB_PORT") is None else os.getenv("MONGODB_PORT")
+
+client = MongoClient(dbHost, int(dbPort))
 db = client.tododb
 
+print ("Database Configurations:")
+print ("\t- MONGODB_HOST:", dbHost)
+print ("\t- MONGODB_PORT:", dbPort)
 
 @app.route('/')
 def todo():

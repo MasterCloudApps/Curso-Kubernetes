@@ -1,10 +1,14 @@
-web:
-  build: .
-  ports:
-    - 5000:5000
-  environment:
-    - MONGODB_HOST=db
-  links:
-    - db
-db:
-  image: mongo:4.4-bionic
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      - MONGODB_HOST=db
+      - MONGODB_PORT=27017
+      - MONGODB_TABLE=posts
+  db:
+    image: mongo:4.4-bionic
+    volumes:
+      - ./db:/data/db
