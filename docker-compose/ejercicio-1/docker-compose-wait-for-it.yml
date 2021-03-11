@@ -1,0 +1,20 @@
+version: "3.9"
+services: 
+  web:
+    build: 
+      context: .
+      dockerfile: wait-for-it.Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/test
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+    command: ["./wait-for-it.sh", "db:3306", "--", "java", "-jar", "app.jar"]
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=test
+    volumes:
+      - ./mysql:/var/lib/mysql

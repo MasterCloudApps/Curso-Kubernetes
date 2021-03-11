@@ -10,6 +10,7 @@ services:
       - MONGODB_TABLE=posts
     depends_on:
       - db
+    restart: on-failure
   db:
     image: mongo:4.4-bionic
     volumes:

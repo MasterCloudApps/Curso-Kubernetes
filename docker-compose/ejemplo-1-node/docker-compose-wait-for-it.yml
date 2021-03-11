@@ -1,7 +1,9 @@
 version: "3.9"
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: wait-for-it.Dockerfile
     ports:
       - 5000:5000
     environment:
@@ -10,6 +12,7 @@ services:
       - MONGODB_TABLE=posts
     depends_on:
       - db
+    command: ["./wait-for-it.sh", "db:27017", "--", "node", "src/server.js"]
   db:
     image: mongo:4.4-bionic
     volumes:
