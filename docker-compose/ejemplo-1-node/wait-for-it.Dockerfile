@@ -24,8 +24,8 @@ ENV NODE_ENV production
 WORKDIR /usr/src/app
 
 # Descargamos el script wait-for-it.sh
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/src/app/
-RUN chmod +x /usr/src/app/wait-for-it.sh
+RUN curl -LJO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
+    && chmod +x /usr/src/app/wait-for-it.sh
 
 # Copiamos el node_modules con todas las dependencias instaladas de la imagen de compilación
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules

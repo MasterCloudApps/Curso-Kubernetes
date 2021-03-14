@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.support.DatabaseStartupValidator;
 
 @SpringBootConfiguration
-public class WaitDatabaseConfiguration {
+public class DatabaseWaitConfigurator {
 	@Bean
 	public DatabaseStartupValidator databaseStartupValidator(DataSource dataSource) {
 		DatabaseStartupValidator dsv = new DatabaseStartupValidator();

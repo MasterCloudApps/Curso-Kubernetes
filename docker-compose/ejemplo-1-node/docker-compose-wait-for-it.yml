@@ -9,7 +9,7 @@ services:
     environment:
       - MONGODB_HOST=db
       - MONGODB_PORT=27017
-      - MONGODB_TABLE=posts
+      - MONGODB_COLLECTION=posts
     depends_on:
       - db
     command: ["./wait-for-it.sh", "db:27017", "--", "node", "src/server.js"]

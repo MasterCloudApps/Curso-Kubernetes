@@ -18,6 +18,9 @@ COPY /src /project/src
 # Compila proyecto
 RUN mvn package -o -DskipTests=true
 
+# Compila proyecto y descarga librerías
+RUN mvn package
+
 #################################################
 # Imagen base para el contenedor de la aplicación
 #################################################
@@ -26,13 +29,6 @@ FROM openjdk:8-jre-slim
 # Define el directorio de trabajo donde se encuentra el JAR
 WORKDIR /usr/src/app/
 
-# Descargamos el script wait-for-it.sh
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -LJO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
-    && chmod +x /usr/src/app/wait-for-it.sh
-
 # Copia el JAR del contenedor de compilación
 COPY --from=builder /project/target/*.jar /usr/src/app/
 
@@ -40,4 +36,4 @@ COPY --from=builder /project/target/*.jar /usr/src/app/
 EXPOSE 8080
 
 # Comando que se ejecuta al hacer docker run
-CMD [ "java", "-jar", "app.jar" ]
+CMD [ "java", "-jar", "java-webapp-0.0.1.jar" ]

@@ -3,16 +3,16 @@ const MongoClient = require('mongodb').MongoClient;
 
 const dbHost = process.env.MONGODB_HOST || "localhost";
 const dbPort = process.env.MONGODB_PORT || "27017";
-const dbTable = process.env.MONGODB_TABLE || "posts";
-const mongoUrl = `mongodb://${dbHost}:${dbPort}/${dbTable}`;
+const dbCollection = process.env.MONGODB_COLLECTION || "posts";
+const mongoUrl = `mongodb://${dbHost}:${dbPort}/${dbCollection}`;
 
 let posts;
 
 async function dbConnect() {
-    console.log("Database Configurations:")
+    console.log("Database Configurations:");
     console.log(`\t- MONGODB_HOST: ${dbHost}`);
     console.log(`\t- MONGODB_PORT: ${dbPort}`);
-    console.log(`\t- MONGODB_TABLE: ${dbTable}`);
+    console.log(`\t- MONGODB_COLLECTION: ${dbCollection}`);
 
     const conn = await MongoClient.connect(mongoUrl, {
         useUnifiedTopology: true,

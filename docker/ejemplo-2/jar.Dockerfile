@@ -1,11 +1,11 @@
 # Selecciona la imagen base
 FROM openjdk:8-jre-slim
 
-# Copia de la aplicación compilada
-COPY target/*.jar /app/
-
 # Define el directorio de trabajo para el comando
-WORKDIR /app
+WORKDIR /usr/src/app/
+
+# Copia de la aplicación compilada
+COPY target/*.jar /usr/src/app/
 
 # Indica el puerto que expone el contenedor
 EXPOSE 8080

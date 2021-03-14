@@ -1,12 +1,12 @@
 # Selecciona la imagen base
 FROM maven:3.6.3-openjdk-8
 
+# Define el directorio de trabajo donde ejecutar comandos
+WORKDIR /project
+
 # Copia el código del proyecto
 COPY /src /project/src
 COPY pom.xml /project/
-
-# Define el directorio de trabajo donde ejecutar comandos
-WORKDIR /project
 
 # Compila proyecto y descarga librerías
 RUN mvn package

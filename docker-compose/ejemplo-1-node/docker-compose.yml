@@ -7,7 +7,7 @@ services:
     environment:
       - MONGODB_HOST=db
       - MONGODB_PORT=27017
-      - MONGODB_TABLE=posts
+      - MONGODB_COLLECTION=posts
     depends_on:
       - db
   db:
