@@ -27,10 +27,13 @@ FROM openjdk:8-jre-slim
 WORKDIR /usr/src/app/
 
 # Copia el JAR del contenedor de compilación
-COPY --from=builder /project/target/*.jar /usr/src/app/
+COPY --from=builder /project/target/app-jar-with-dependencies.jar /usr/src/app/
 
 # Indica el puerto que expone el contenedor
 EXPOSE 8080
 
-# Comando que se ejecuta al hacer docker run
-CMD [ "java", "-jar", "java-webapp-0.0.1.jar" ]
+# Comando por defecto
+ENTRYPOINT [ "java", "-jar", "app-jar-with-dependencies.jar" ]
+
+# Parametro por defecto
+CMD ["--server"]
