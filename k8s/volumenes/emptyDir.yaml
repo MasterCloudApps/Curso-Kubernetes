@@ -4,8 +4,9 @@ metadata:
   name: test-pd
 spec:
   containers:
-  - image: k8s.gcr.io/test-webserver
+  - image: ubuntu
     name: test-container
+    command: ["/bin/bash", "-ec", "while :; do echo '.'; sleep 5 ; done"]
     volumeMounts:
     - mountPath: /cache
       name: cache-volume
