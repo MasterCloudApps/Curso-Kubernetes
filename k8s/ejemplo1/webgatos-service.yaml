@@ -6,10 +6,9 @@ metadata:
   labels:
     app: webgatos
 spec:
-  ports:
-    - port: 5000
-      protocol: TCP
-      name: webgatos-port
-  selector:
-    app: webgatos
   type: LoadBalancer
+  selector:
+    app: webgatos 
+  ports:
+    - name: webgatos-port 
+      port: 5000 
