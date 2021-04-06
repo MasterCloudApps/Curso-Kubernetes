@@ -1,12 +1,13 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: 10g-volume
+  name: nginx-pv
 spec:
-  storageClassName: manual
-  capacity:
-    storage: 10Gi
+  storageClassName: nginx
   accessModes:
     - ReadWriteOnce
+  capacity:
+    storage: 3Gi  
   hostPath:
-    path: "/mnt/data"
+    path: /pod-data
+
