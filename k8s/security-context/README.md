@@ -227,42 +227,17 @@ $ kubectl delete -f privileged-pod.yaml
 
 ### Activamos el admission controller que aplica las PodSecurityPolicies
 
-Lo he intentado hacer en minikube pero no he encontrado el comando que permite activar el controlador. 
-
-Este comando HA FALLADO!
-
 ```
-$ minikube start --extra-config=apiserver.GenericServerRunOptions.AdmissionControl=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds,PodSecurityPolicy
+minikube start --extra-config=apiserver.enable-admission-plugins=PodSecurityPolicy --addons=pod-security-policy
 ```
 
-Y este otro TAMBIÉN HA FALLADO:
-```
-$ minikube start --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
-```
-
-Parece que no está soportado o al menos [no es trivial hacerlo funcionar en minikube](https://github.com/kubernetes/minikube/issues/3818).
-
-Probamos a activar las políticas en GKE.
-
-https://cloud.google.com/kubernetes-engine/docs/how-to/pod-security-policies
-
-Se crea un cluster normalmente y posteriormente se puede activar el admission controller con el comando:
-
-```
-$ gcloud beta container clusters update [ZONE] [CLUSTER_NAME] --enable-pod-security-policy
-Updating standard-cluster-1...
-```
-
-Después de un tiempo (varios minutos), el cluster está disponible de nuevo. Podemos consultar las políticas que tiene por defecto:
+Podemos consultar las políticas que tiene por defecto:
 
 ```
 & kubectl get psp
-NAME                           PRIV    CAPS                                                                                                                        SELINUX    RUNASUSER   FSGROUP    SUPGROUP   READONLYROOTFS   VOLUMES
-gce.event-exporter             false                                                                                                                               RunAsAny   RunAsAny    RunAsAny   RunAsAny   false            hostPath,secret
-gce.fluentd-gcp                false                                                                                                                               RunAsAny   RunAsAny    RunAsAny   RunAsAny   false            configMap,hostPath,secret
-gce.persistent-volume-binder   false                                                                                                                               RunAsAny   RunAsAny    RunAsAny   RunAsAny   false            nfs,secret
-gce.privileged                 true    *                                                                                                                           RunAsAny   RunAsAny    RunAsAny   RunAsAny   false            *
-gce.unprivileged-addon         false   SETPCAP,MKNOD,AUDIT_WRITE,CHOWN,NET_RAW,DAC_OVERRIDE,FOWNER,FSETID,KILL,SETGID,SETUID,NET_BIND_SERVICE,SYS_CHROOT,SETFCAP   RunAsAny   RunAsAny    RunAsAny   RunAsAny   false            emptyDir,configMap,secret
+NAME         PRIV    CAPS   SELINUX    RUNASUSER          FSGROUP     SUPGROUP    READONLYROOTFS   VOLUMES
+privileged   true    *      RunAsAny   RunAsAny           RunAsAny    RunAsAny    false            *
+restricted   false          RunAsAny   MustRunAsNonRoot   MustRunAs   MustRunAs   false            configMap,emptyDir,projected,secret,downwardAPI,persistentVolumeClaim
 ```
 
 Podemos intentar crear el pod de nuevo. Se crea correctamente porque el usuario admin (el que ejecuta los comandos kubectl) tiene políticas asociadas que le permiten hacerlo:
@@ -335,6 +310,10 @@ roleRef:
   kind: Role
   name: app-role
   apiGroup: rbac.authorization.k8s.io
+```
+
+```
+$ kubectl apply -f psp-role-sa.yaml
 ```
 
 Intentamos crear un pod privilegiado de nuevo:
@@ -428,7 +407,7 @@ Pero si usamos un deployment con el pod privilegiado:
 ```
 $ kubectl delete -f no-privileged-deploy.yaml
 $ kubectl apply -f privileged-deploy.yaml
-$ kubectl get deployments -o yaml
+$ kubectl get deployments,pods
 NAME                             DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 deployment.extensions/psp-demo   1         0         0            0           31s
 ```
