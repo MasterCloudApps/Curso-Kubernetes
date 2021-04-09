@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-sa
+
+  labels:
+    name: pod-with-sa
+spec:
+  serviceAccountName: mysa
+  containers:
+  - name: shell
+    image: alpine:3.7
+    command: 
+      - "sh"
+      - "-c"
+      - "sleep 10000"
