@@ -6,7 +6,7 @@ Usaremos una aplicación con dos microservicios sintéticos implementados en Pyt
 
 Los servicios son:
 * ServiceA es el frontal y atiende peticiones del exterior
-* ServiceB es un servicio interno y no debería aceptar peticiones del exterior
+* ServiceB es un servicio interno y no debería aceptar peticiones del exterior. Es usado desde el serviceA.
 
 ### Construcción de contenedores
 
@@ -38,17 +38,21 @@ $ docker push codeurjc/np-serviceb
 Y las podemos desplegar en minikube:
 
 ```
-kubectl apply -f kubernetes/servicea.yaml
-kubectl apply -f kubernetes/serviceb-deployment.yaml
-kubectl apply -f kubernetes/serviceb-service-np.yaml
+$ kubectl apply -f kubernetes/servicea.yaml
+$ kubectl apply -f kubernetes/serviceb-deployment.yaml
+$ kubectl apply -f kubernetes/serviceb-service-np.yaml
 ```
 
 Obtenemos la URL pública de los servicios
 
 ``` 
 $ HOST=$(minikube ip)
+$ echo $HOST
 $ SA_PORT=$(kubectl get service servicea-service --output='jsonpath={.spec.ports[0].nodePort}')
+$ echo $SA_PORT
 $ SB_PORT=$(kubectl get service serviceb-service --output='jsonpath={.spec.ports[0].nodePort}')
+$ echo $SB_PORT
+
 ```
 
 ### Verificación comunicación de servicios
@@ -81,13 +85,13 @@ $ curl http://$HOST:$SA_PORT/servicebvalue-internal
 
 * ServiceB External Egress (direct)
 ```
-$ curl http://$HOST:$SA_PORT/servicebvalue-external
+$ curl http://$HOST:$SB_PORT/externalvalue
 ...0747532699...
 ```
 
 * ServiceB External Egress (through ServiceA)
 ```
-$ curl http://$HOST:$SB_PORT/externalvalue
+$ curl http://$HOST:$SA_PORT/servicebvalue-external
 ...0747532699...
 ```
 
@@ -166,16 +170,13 @@ Instalaremos cilium en Minikube siguiendo este post:
 
 https://supergiant.io/blog/understanding-network-policies-in-kubernetes/
 
-Iniciamos minikube con el network plugin
+Iniciamos minikube con el network plugin de tipo cilium
 
 ```
-$ minikube start --network-plugin=cni --memory=4096
+$ minikube start --cni=cilium
 ```
 
-Desplegamos cilium
-```
-$ kubectl create -f https://raw.githubusercontent.com/cilium/cilium/1.5.3/examples/kubernetes/1.14/cilium-minikube.yaml
-```
+Más información https://docs.cilium.io/en/v1.9/gettingstarted/minikube/
 
 Verificamos que se ha desplegado correctamente
 ```
@@ -185,9 +186,7 @@ cilium-nhwl7                                0/1     Running   0          31s
 ...
 ```
 
-### Instalar Network policy plugin en Docker Desktop
-
-No he visto forma de hacerlo. Es posible que se pueda hacer en el futuro:
+NOTA: Parece que no se puede instalar el network plugin con cilium en Docker Desktop. Aquí el issue en el que están haciendo el tracking:
 
 https://github.com/cilium/cilium/issues/10516
 
@@ -205,6 +204,7 @@ Desplegamos el Deny all policy:
 
 ```
 $ kubectl apply -f kubernetes/np-deny-all.yaml
+$ ./test.sh
 ServiceA External Ingress: FAIL
 ServiceB External Ingress: FAIL
 ServiceA External Egress: FAIL
