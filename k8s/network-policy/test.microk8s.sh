@@ -11,10 +11,13 @@ function test() {
     fi
 }
 
-
 HOST=127.0.0.1
-SA_PORT=$(microk8s.kubectl get service servicea-service --output='jsonpath={.spec.ports[0].nodePort}')
-SB_PORT=$(microk8s.kubectl get service serviceb-service --output='jsonpath={.spec.ports[0].nodePort}')
+SA_PORT=$(sudo microk8s kubectl get service servicea-service --output='jsonpath={.spec.ports[0].nodePort}')
+SB_PORT=$(sudo microk8s kubectl get service serviceb-service --output='jsonpath={.spec.ports[0].nodePort}')
+
+echo Host: $HOST
+echo ServiceA port: $SA_PORT
+echo ServiceB port: $SB_PORT
 
 test "ServiceA External Ingress" "http://$HOST:$SA_PORT/internalvalue" "{ value: 0 }"
 test "ServiceB External Ingress" "http://$HOST:$SB_PORT/internalvalue" "{ value: 0 }"

@@ -166,17 +166,15 @@ Las conexiones que funcionaban lo siguen haciendo. No se ha hecho honor a la net
 
 ### Instalar Network policy plugin en MiniKube
 
-Instalaremos cilium en Minikube siguiendo este post:
+Instalaremos cilium en Minikube siguiendo estas instrucciones:
 
-https://supergiant.io/blog/understanding-network-policies-in-kubernetes/
+https://docs.cilium.io/en/v1.9/gettingstarted/minikube/
 
-Iniciamos minikube con el network plugin de tipo cilium
+Iniciamos minikube con el network plugin de tipo cilium con VirtualBox (Yo no he conseguido hacerlo funcionar con docker, el driver por defecto)
 
 ```
-$ minikube start --cni=cilium
+minikube start --cni=cilium --memory=4096 --driver=virtualbox
 ```
-
-Más información https://docs.cilium.io/en/v1.9/gettingstarted/minikube/
 
 Verificamos que se ha desplegado correctamente
 ```
@@ -313,7 +311,36 @@ spec:
       protocol: TCP
 ```
 
-Con Cilium podemos tener egress con FQDN (https://docs.cilium.io/en/v1.4/policy/language/#dns-based)
+Con Cilium podemos tener egress con FQDN (https://docs.cilium.io/en/v1.9/gettingstarted/dns/)
+
+`np-servicea-egress3.yaml`
+```
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: servicea-external-egress3
+spec:
+  endpointSelector:
+    matchLabels:
+      app: servicea
+  egress:
+    # allow connection to www.googleapis.com > 2a00:1450:4003:801::200a
+    # Note that DNS IP can change. Egress can not be configured with host names
+  - toFQDNs:
+    - matchName: "www.googleapis.com"
+  - toEndpoints:
+    - matchLabels:
+        "k8s:io.kubernetes.pod.namespace": kube-system
+        "k8s:k8s-app": kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: ANY
+      rules:
+        dns:
+        - matchPattern: "*"
+```
+
 
 ### Permitimos comunicación Service A al Servicio B (ServiceA to ServiceB):
 
@@ -353,6 +380,10 @@ spec:
       ports:
       - port: 5000
         protocol: TCP  
+```
+
+```
+$ kubectl apply -f kubernetes/np-servicea-serviceb.yaml
 ```
 
 ```

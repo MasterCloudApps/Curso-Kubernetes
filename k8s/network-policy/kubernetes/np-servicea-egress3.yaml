@@ -1,0 +1,26 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: servicea-external-egress3
+spec:
+  endpointSelector:
+    matchLabels:
+      app: servicea
+  egress:
+    # allow connection to www.googleapis.com > 2a00:1450:4003:801::200a
+    # Note that DNS IP can change. Egress can not be configured with host names
+  - toFQDNs:
+    - matchName: "www.googleapis.com"
+  - toEndpoints:
+    - matchLabels:
+        "k8s:io.kubernetes.pod.namespace": kube-system
+        "k8s:k8s-app": kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: ANY
+      rules:
+        dns:
+        - matchPattern: "*"
+
+
