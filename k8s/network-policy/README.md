@@ -213,7 +213,7 @@ ServiceB External Egress (through ServiceA): FAIL
 
 ### Permitimos tráfico público al service A (SericeA External Ingress):
 
-Permitimos conexión del service A con el exterior con `np-servicea-ingress.yaml`
+Permitimos conexión del service A con el exterior al puerto 5000 con `np-servicea-ingress.yaml`
 
 ```
 apiVersion: networking.k8s.io/v1
@@ -226,6 +226,9 @@ spec:
       app: servicea
   ingress:
     - from: []
+      ports:
+      - protocol: TCP
+        port: 5000
 ```
 
 ```
@@ -439,7 +442,7 @@ Podemos usar Ingress Controller para publicar el serviceA.
 Para ello, activamos el addon de Ingress en minikube
 
 ```
-$ minikube enable ingress
+$ minikube addons enable ingress
 ```
 
 `ingress.yaml`
@@ -496,6 +499,46 @@ Ahora podemos acceder al ServicioA desde el puerto 80 (usando el ingress control
 
 ```
 $ ./test-ingress.sh
+Testing serviceA from http://192.168.99.102/servicea/
+ServiceA External Ingress: OK
+ServiceA External Egress: OK
+ServiceA to ServiceB: OK
+ServiceB External Egress (through ServiceA): OK
+```
+
+En el caso de usar el ingress podemos afinar todavía más la network-policy del servicea para que sólo permita el acceso desde el Ingress (y no desde cualquier sitio):
+
+Para ello, un kubernetes previos a la versión 1.21 primero tenemos que poner una etiqueta en el namespace kube-system:
+
+```
+$ kubectl label namespace kube-system kubernetes.io/metadata.name=kube-system
+```
+
+`np-servicea-ingress-ingress.yaml`
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: servicea-external-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app: servicea
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 5000
+```
+
+```
+$ kubectl apply -f kubernetes/np-servicea-ingress-ingress.yaml
 ```
 
 ## Más información

@@ -8,3 +8,6 @@ spec:
       app: servicea
   ingress:
     - from: []
+      ports:
+      - protocol: TCP
+        port: 5000
