@@ -432,6 +432,72 @@ ServiceB External Egress (direct): FAIL
 ServiceB External Egress (through ServiceA): OK
 ```
 
+## ServiceA accesible con Ingress Controller
+
+Podemos usar Ingress Controller para publicar el serviceA. 
+
+Para ello, activamos el addon de Ingress en minikube
+
+```
+$ minikube enable ingress
+```
+
+`ingress.yaml`
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress  
+metadata:  
+  name: servicea-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:  
+  rules:
+   - http:
+      paths:
+      - path: /servicea(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: servicea-service
+            port:
+              number: 5000
+```
+
+```
+$ kubectl apply -f kubernetes/ingress.yaml
+```
+
+Ahora actualizamos el Service del ServicioA a ClusterIP:
+
+`servicea-service-cpi.yaml`
+```
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicea-service
+  labels:
+    app: servicea
+spec:
+  ports:
+    - port: 5000
+      protocol: TCP
+      name: servicea-port
+  selector:
+    app: servicea
+  type: ClusterIP
+```
+
+```
+$ kubectl apply -f kubernetes/servicea-service-cip.yaml
+```
+
+Ahora podemos acceder al ServicioA desde el puerto 80 (usando el ingress controller) y la ruta `http://minikube-ip/servicea/`
+
+```
+$ ./test-ingress.sh
+```
+
 ## Más información
 
 * [Página oficial de Kubernetes sobre Network policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)

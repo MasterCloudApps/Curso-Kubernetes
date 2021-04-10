@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress  
+metadata:  
+  name: servicea-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:  
+  rules:
+   - http:
+      paths:
+      - path: /servicea(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: servicea-service
+            port:
+              number: 5000      
+            
