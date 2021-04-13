@@ -8,7 +8,7 @@ public class RestHelloWorld {
 	
 	@GetMapping("/")
 	public String sayHello() {
-		return "Hello world REST API3";
+		return "Hello world REST6";
 	}
 
 }

@@ -1,9 +1,11 @@
 name: demoservice-dply
+image: maven:3.6-jdk-8
 command:
-  - java
-  - -cp
-  - /app/resources:/app/classes:/app/libs/*
-  - es.codeurjc.k8sdevtools.demoservice.Application
+  - mvn
+  - spring-boot:run
+volumes:
+  - /root/.m2
 forward:
   - 8080:8080
-
+  - 8000:8000
+  - 35729:35729

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: demoservice
-        image: micaelgallego/demoservice-k8s3:latest
+        image: codeurjc/demoservice-k8s3:latest
         ports:
         - containerPort: 8080
 ---

@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
       - name: demoservice
-        image: codeurjc/demoservice-k8s1:latest
-        imagePullPolicy: Always
+        image: codeurjc/demoservice-k8s6:latest
         ports:
         - containerPort: 8080
 ---
