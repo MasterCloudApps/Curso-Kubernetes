@@ -8,6 +8,6 @@ public class RestHelloWorld {
 	
 	@GetMapping("/")
 	public String sayHello() {
-		return "Hello world REST with hot reload!!!11";
+		return "Hello world REST API4 with hot reload!!!";
 	}
 }
