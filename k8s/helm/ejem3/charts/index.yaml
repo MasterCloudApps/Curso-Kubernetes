@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  myweb:
+  - apiVersion: v1
+    appVersion: 1.1.0
+    created: "2021-04-13T15:31:09.984259714+02:00"
+    description: This is the chart for httpd
+    digest: 904a5ff760ace5d7fa280aed45d3972ea9cba8ce31b3e2fe8619639ecf549847
+    name: myweb
+    urls:
+    - myweb-0.0.5.tgz
+    version: 0.0.5
+generated: "2021-04-13T15:31:09.983937897+02:00"
