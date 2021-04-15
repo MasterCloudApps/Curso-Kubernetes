@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>es.codeurjc.k8sdevtools</groupId>
-	<artifactId>demoservice-k8s4</artifactId>
+	<artifactId>demoservice-k8s5</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<parent>
@@ -38,15 +38,10 @@
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>3.0.0</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<jvmArguments>
-						-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
-					</jvmArguments>
+					<from>
+						<image>gcr.io/distroless/java:debug</image>
+					</from>
 				</configuration>
 			</plugin>
 		</plugins>

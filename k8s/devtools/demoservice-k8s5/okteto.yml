@@ -1,5 +1,5 @@
 name: demoservice-dply
-image: maven:3.6-jdk-8
+image: maven:3.8.1-jdk-11
 command:
   - mvn
   - spring-boot:run

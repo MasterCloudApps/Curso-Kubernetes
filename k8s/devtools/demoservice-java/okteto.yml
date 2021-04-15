@@ -1,0 +1,10 @@
+name: planner-deploy
+image: okteto/maven:3
+command: bash
+volumes:
+- /root/.m2
+sync:
+- .:/usr/src/app
+forward:
+- 5005:5005
+- 8080:8080

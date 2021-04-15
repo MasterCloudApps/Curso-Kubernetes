@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestHelloWorld {
 	
 	@GetMapping("/")
-	public String sayHello() {
+	public String sayHello() {		
 		return "Hello world REST API5 with hot reload!!!";
 	}
 }
