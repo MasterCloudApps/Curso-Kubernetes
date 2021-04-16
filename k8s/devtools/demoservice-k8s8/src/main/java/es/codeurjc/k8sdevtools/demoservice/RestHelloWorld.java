@@ -8,6 +8,6 @@ public class RestHelloWorld {
 	
 	@GetMapping("/")
 	public String sayHello() {
-		return "Hello world REST API8 with VSCode!!!";
+		return "Hello world REST API8 with VSCode Bridge To Kubernetes!!!";
 	}
 }
