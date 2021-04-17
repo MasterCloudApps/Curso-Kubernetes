@@ -285,6 +285,8 @@ ServiceB External Egress (through ServiceA): FAIL
 
 Pero esta regla permite la comunicación a cualquier IP y puertos 443 y 53.
 
+**NOTA:** Todos los servicios que tengan que conectarse con otros servicios necesitan acceso al puerto 53 para poder resolver el nombre.
+
 Podemos ajustar más el egress.
 
 `np-servicea-egress2.yaml`
@@ -540,6 +542,7 @@ spec:
 ```
 $ kubectl apply -f kubernetes/np-servicea-ingress-ingress.yaml
 ```
+**NOTA:** Esta Network Policy es bastante frágil porque sólo funciona si el nginx-controller está en el namespace `kube-system` y tiene una label `app.kubernetes.io/name:ingress-nginx`. Por ejemplo, en minikube 1.18 si es así, pero en minikube 1.19 el nginx-controller está en otro namespace y por tanto esta política fallará.
 
 ## Más información
 
