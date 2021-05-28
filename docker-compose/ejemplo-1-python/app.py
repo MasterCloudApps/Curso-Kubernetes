@@ -8,19 +8,19 @@ dbHost = "localhost" if os.getenv("MONGODB_HOST") is None else os.getenv("MONGOD
 dbPort = "27017" if os.getenv("MONGODB_PORT") is None else os.getenv("MONGODB_PORT")
 
 client = MongoClient(dbHost, int(dbPort))
-db = client.tododb
+db = client.postsdb
 
 print ("Database Configurations:")
 print ("\t- MONGODB_HOST:", dbHost)
 print ("\t- MONGODB_PORT:", dbPort)
 
 @app.route('/')
-def todo():
+def posts():
 
-    _items = db.tododb.find()
+    _items = db.postsdb.find()
     items = [item for item in _items]
 
-    return render_template('todo.html', items=items)
+    return render_template('index.html', items=items)
 
 
 @app.route('/new', methods=['POST'])
@@ -30,9 +30,9 @@ def new():
         'name': request.form['name'],
         'description': request.form['description']
     }
-    db.tododb.insert_one(item_doc)
+    db.postsdb.insert_one(item_doc)
 
-    return redirect(url_for('todo'))
+    return redirect(url_for('posts'))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
