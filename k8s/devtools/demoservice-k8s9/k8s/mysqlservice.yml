@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqlservice-dply
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysqlservice
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysqlservice
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0.22
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "password"
+        - name: MYSQL_DATABASE
+          value: "test"
+        ports:
+        - containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqlservice-service
+  labels:
+    app: mysqlservice
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+    protocol: TCP
+    name: mysqlservice-port
+  selector:
+    app: mysqlservice
+  type: ClusterIP

@@ -8,7 +8,6 @@ public class RestHelloWorld {
 	
 	@GetMapping("/")
 	public String sayHello() {
-		return "Hello world REST6";
+		return "Hello world REST API6 with Okteto + VSCode!!!";
 	}
-
 }

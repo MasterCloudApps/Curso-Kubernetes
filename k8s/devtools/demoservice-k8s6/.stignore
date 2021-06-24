@@ -1,2 +1,4 @@
-/.mvn
-/target
+okteto.yml
+.mvn
+mvnw
+mvnw.cmd
