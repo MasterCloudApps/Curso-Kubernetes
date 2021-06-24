@@ -4,3 +4,6 @@ metadata:
   name: {{ .Release.Name }}-configmap
 data:
   myvalue: "Hello World"
+  {{- range $index, $namespace := (lookup "v1" "Namespace" "" "").items }}
+  value{{$index}}: {{ $namespace.metadata.name | quote }}
+  {{- end }}

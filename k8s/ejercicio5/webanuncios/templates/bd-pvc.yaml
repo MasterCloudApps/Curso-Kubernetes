@@ -1,0 +1,37 @@
+{{- if .Values.bd.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "mysql.name" . }}-pvc
+  labels:
+    app: {{ template "mysql.name" . }}
+    chart: {{ template "mysql.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.bd.persistence.claim }}
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ template "mysql.fullname" . }}
+  labels:
+    type: local
+    app: {{ template "mysql.name" . }}
+    chart: {{ template "mysql.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  storageClassName: standard
+  capacity:
+    storage: {{ .Values.bd.persistence.total }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.bd.persistence.hostpath }}
+{{- end }}

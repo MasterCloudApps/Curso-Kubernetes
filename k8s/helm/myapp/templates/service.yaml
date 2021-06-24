@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "myapp.fullname" . }}
-  labels:
-    {{- include "myapp.labels" . | nindent 4 }}
+  labels: 
+    {{- include "myapp.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -11,5 +11,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-  selector:
-    {{- include "myapp.selectorLabels" . | nindent 4 }}
+  selector: 
+    {{- include "myapp.selectorLabels" . | indent 4 }}
