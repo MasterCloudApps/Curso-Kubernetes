@@ -1,6 +1,6 @@
 *odp
-Apps/webapp-bd-java/.classpath
-Apps/webapp-bd-java/.project
-Apps/webapp-bd-java/.settings
-Apps/webapp-bd-java/.vscode
-Apps/webapp-bd-java/target
+.classpath
+.project
+.settings
+.vscode
+target
