@@ -24,7 +24,7 @@ RUN mvn package -o -DskipTests=true
 FROM openjdk:8-jre-slim
 
 # Define el directorio de trabajo donde se encuentra el JAR
-WORKDIR /usr/src/app/
+WORKDIR /usr/app/
 
 # Copia el JAR del contenedor de compilación
 COPY --from=builder /project/target/*.jar /usr/app/
