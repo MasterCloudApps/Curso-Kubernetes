@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - image: nginx:1.19.8
+    name: nginx    
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html
+      name: web
+  volumes:
+  - name: web
+    # C:\pod-data
+    hostPath:
+      path: /run/desktop/mnt/host/c/pod-data 
+      type: Directory
