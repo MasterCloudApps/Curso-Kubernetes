@@ -1,7 +1,7 @@
 #################################################
 # Imagen base para el contenedor de compilación
 #################################################
-FROM maven:3.6.3-openjdk-8 as builder
+FROM maven:3.8.4-openjdk-17 as builder
 
 # Define el directorio de trabajo donde ejecutar comandos
 WORKDIR /project
@@ -21,7 +21,7 @@ RUN mvn package -o -DskipTests=true
 #################################################
 # Imagen base para el contenedor de la aplicación
 #################################################
-FROM openjdk:8-jre-slim
+FROM openjdk:17-jdk-slim
 
 # Define el directorio de trabajo donde se encuentra el JAR
 WORKDIR /usr/src/app
