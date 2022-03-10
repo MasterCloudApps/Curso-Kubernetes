@@ -1,5 +1,5 @@
 # Selecciona la imagen base
-FROM maven:3.6.3-openjdk-8
+FROM maven:3.8.4-openjdk-17
 
 # Define el directorio de trabajo donde ejecutar comandos
 WORKDIR /project
@@ -9,7 +9,7 @@ COPY /src /project/src
 COPY pom.xml /project/
 
 # Compila proyecto y descarga librerías
-RUN mvn package
+RUN mvn -B package
 
 # Indica el puerto que expone el contenedor
 EXPOSE 8080

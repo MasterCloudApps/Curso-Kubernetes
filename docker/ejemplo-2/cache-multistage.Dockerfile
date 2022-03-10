@@ -1,7 +1,7 @@
 #################################################
 # Imagen base para el contenedor de compilación
 #################################################
-FROM maven:3.6.3-openjdk-8 as builder
+FROM maven:3.8.4-openjdk-17 as builder
 
 # Define el directorio de trabajo donde ejecutar comandos
 WORKDIR /project
@@ -10,18 +10,18 @@ WORKDIR /project
 COPY pom.xml /project/
 
 # Descarga las dependencias del proyecto
-RUN mvn clean verify
+RUN mvn -B dependency:go-offline
 
 # Copia el código del proyecto
 COPY /src /project/src
 
 # Compila proyecto
-RUN mvn package -o
+RUN mvn -B package
 
 #################################################
 # Imagen base para el contenedor de la aplicación
 #################################################
-FROM openjdk:8-jre-slim
+FROM openjdk:17-jdk-slim
 
 # Define el directorio de trabajo donde se encuentra el JAR
 WORKDIR /usr/src/app/

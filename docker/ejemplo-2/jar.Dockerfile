@@ -1,5 +1,5 @@
 # Selecciona la imagen base
-FROM openjdk:8-jre-slim
+FROM openjdk:17-jdk-slim
 
 # Define el directorio de trabajo para el comando
 WORKDIR /usr/src/app/
