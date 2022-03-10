@@ -7,13 +7,13 @@ FROM maven:3.8.4-openjdk-17 as builder
 WORKDIR /project
 
 # Copia las dependencias del proyecto
-COPY pom.xml /project/
+COPY aplicacion-java-enunciado/pom.xml /project/
 
 # Descarga las dependencias del proyecto
 RUN mvn -B dependency:go-offline
 
 # Copia el código del proyecto
-COPY /src /project/src
+COPY aplicacion-java-enunciado/src /project/src
 
 # Compila proyecto
 RUN mvn -B package
