@@ -1,0 +1,15 @@
+{
+  "name": "webgatos",
+  "version": "1.0.0",
+  "description": "Web de Gatos",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mustache-express": "^1.3.0"
+  }
+}
