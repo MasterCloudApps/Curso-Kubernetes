@@ -1,5 +1,6 @@
-const mustacheExpress = require('mustache-express');
-const express = require('express');
+import express from 'express';
+import mustacheExpress from 'mustache-express';
+import { __dirname } from './dirname.js';
 
 const port = 5000;
 

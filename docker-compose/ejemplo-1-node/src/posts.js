@@ -1,5 +1,5 @@
-const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
+import express from 'express';
+import { MongoClient } from 'mongodb';
 
 const dbHost = process.env.MONGODB_HOST || "localhost";
 const dbPort = process.env.MONGODB_PORT || "27017";
@@ -22,11 +22,11 @@ async function dbConnect() {
     posts = conn.db().collection('posts');
 }
 
-async function init() {
+export async function init() {
     await dbConnect();
 }
 
-const router = express.Router();
+export const router = express.Router();
 
 router.get('/', async (req, res) => {
     const allPosts = await posts.find({}).toArray();
@@ -42,5 +42,3 @@ router.post('/new', async (req, res) => {
     await posts.insertOne(post);
     res.redirect('/');
 });
-
-module.exports = { router, init };

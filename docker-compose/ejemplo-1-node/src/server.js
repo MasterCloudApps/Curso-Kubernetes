@@ -1,7 +1,7 @@
-const express = require('express');
-const mustacheExpress = require('mustache-express');
-const postsRouter = require('./posts.js').router;
-const postsInit = require('./posts.js').init;
+import express from 'express';
+import mustacheExpress from 'mustache-express';
+import { router as postsRouter, init as postsInit } from './posts.js';
+import { __dirname } from './dirname.js';
 
 const APP_PORT = 5000;
 
@@ -21,13 +21,9 @@ process.on('SIGINT', () => {
     process.exit(0);
 });
 
-async function main() {
-    await postsInit();
+await postsInit();
 
-    app.listen(APP_PORT, () => {
-        console.log(`* Running on http://localhost:${APP_PORT}/`);
-        console.log("  (Press CTRL+C to quit)");
-    });
-}
-
-main();
+app.listen(APP_PORT, () => {
+    console.log(`* Running on http://localhost:${APP_PORT}/`);
+    console.log("  (Press CTRL+C to quit)");
+});
