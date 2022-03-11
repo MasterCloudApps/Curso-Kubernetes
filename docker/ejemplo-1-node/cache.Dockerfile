@@ -21,4 +21,4 @@ COPY views/index.html /usr/src/app/views/
 EXPOSE 5000
 
 # Comando que se ejecuta cuando se arranque el contenedor
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
