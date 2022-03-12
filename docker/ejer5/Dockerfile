@@ -10,13 +10,13 @@ WORKDIR /project
 COPY aplicacion-java-enunciado/pom.xml /project/
 
 # Descarga las dependencias del proyecto
-RUN mvn -B dependency:go-offline
+RUN mvn -B clean verify
 
 # Copia el código del proyecto
 COPY aplicacion-java-enunciado/src /project/src
 
 # Compila proyecto
-RUN mvn -B package
+RUN mvn -B -o package
 
 #################################################
 # Imagen base para el contenedor de la aplicación

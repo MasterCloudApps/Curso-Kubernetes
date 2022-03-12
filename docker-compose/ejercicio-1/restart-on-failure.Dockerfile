@@ -10,13 +10,13 @@ WORKDIR /project
 COPY pom.xml /project/
 
 # Descarga las dependencias del proyecto
-RUN mvn clean verify
+RUN mvn -B clean verify
 
 # Copia el código del proyecto
 COPY /src /project/src
 
 # Compila proyecto
-RUN mvn package -o -DskipTests=true
+RUN mvn -B -o package -DskipTests=true
 
 #################################################
 # Imagen base para el contenedor de la aplicación
