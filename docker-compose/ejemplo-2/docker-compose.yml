@@ -9,7 +9,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password
   db:
-    image: mysql:5.7
+    image: mysql:8.0.28
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=test

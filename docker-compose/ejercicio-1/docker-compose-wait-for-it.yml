@@ -12,7 +12,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=password
     command: ["./wait-for-it.sh", "db:3306", "--", "java", "-jar", "app.jar"]
   db:
-    image: mysql:5.7
+    image: mysql:8.0.28
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=test
