@@ -14,8 +14,7 @@ COPY package.json /usr/src/app/
 RUN npm install --only=production
 
 # Copiamos el resto de ficheros de la aplicación
-COPY server.js /usr/src/app/
-COPY views/index.html /usr/src/app/views/
+COPY src /usr/src/app/src
 
 # Indica el puerto que expone el contenedor
 EXPOSE 5000

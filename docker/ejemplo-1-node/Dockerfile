@@ -8,8 +8,7 @@ ENV NODE_ENV production
 WORKDIR /usr/src/app/
 
 # Copiamos los ficheros de la aplicación
-COPY server.js /usr/src/app/
-COPY views/index.html /usr/src/app/views/
+COPY src /usr/src/app/src
 COPY package.json /usr/src/app/
 
 # Instalamos las dependencias que necesita la app
