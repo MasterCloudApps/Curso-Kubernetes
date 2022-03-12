@@ -28,6 +28,7 @@ COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 
 # Copiamos los ficheros de la aplicación
 COPY src /usr/src/app/src
+COPY package.json /usr/src/app/
 
 # Indica el puerto que expone el contenedor
 EXPOSE 5000
