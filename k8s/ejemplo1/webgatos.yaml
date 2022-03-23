@@ -4,12 +4,10 @@ kind: Deployment
 metadata:
   name: webgatos-deploy
 spec:
-  strategy:
-    type: Recreate
+  replicas: 1 # tells deployment to run 1 pods matching the template
   selector:
     matchLabels:
-      app: webgatos
-  replicas: 1 # tells deployment to run 1 pods matching the template
+      app: webgatos  
   template: # create pods using pod definition in this template
     metadata:
       labels:
@@ -28,11 +26,9 @@ metadata:
   labels:
     app: webgatos
 spec:
-  ports:
-    - port: 5000
-      targetPort: 5000
-      protocol: TCP
-      name: webgatos-port
+  type: LoadBalancer
   selector:
-    app: webgatos
-  type: NodePort
+    app: webgatos 
+  ports:
+    - name: webgatos-port 
+      port: 5000
