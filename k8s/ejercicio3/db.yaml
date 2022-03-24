@@ -29,4 +29,5 @@ spec:
   selector:
     app: db
   ports:
-  - port: 3306
+  - name: db-port
+    port: 3306
