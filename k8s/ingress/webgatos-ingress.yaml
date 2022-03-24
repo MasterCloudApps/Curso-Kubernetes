@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress  
 metadata:  
-  name: codeurjc-ingress
+  name: webgatos-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:  
@@ -14,12 +14,5 @@ spec:
           service:
             name: webgatos
             port:
-              number: 5000      
-      - path: /webapp(/|$)(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: webapp
-            port:
-              number: 8080
+              number: 5000
             

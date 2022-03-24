@@ -9,18 +9,17 @@ spec:
    - host: www.mastercloudapps.com
      http:
       paths:
-      - path: /anuncios(/|$)(.*)
+      - path: /webgatos
+        pathType: Prefix
+        backend:
+          service:
+            name: webgatos
+            port:
+              number: 5000      
+      - path: /webapp(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
             name: webapp
             port:
               number: 8080
-      - path: /gatos(/|$)(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: webgatos-service
-            port:
-              number: 5000
-            
