@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webgatos-deploy
+  name: webgatos
 spec:
-  replicas: 1 # tells deployment to run 1 pods matching the template
+  replicas: 1
   selector:
     matchLabels:
       app: webgatos  
-  template: # create pods using pod definition in this template
+  template: # Pod definition
     metadata:
       labels:
         app: webgatos
