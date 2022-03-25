@@ -31,8 +31,8 @@ metadata:
   labels:
     app: webapp
 spec:
-  ports:
-  - port: 8080
+  type: LoadBalancer
   selector:
     app: webapp
-  type: LoadBalancer
+  ports:
+  - port: 8080
