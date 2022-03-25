@@ -6,7 +6,7 @@ spec:
   containers:
   - image: ubuntu
     name: test-container
-    command: ["/bin/bash", "-ec", "while :; do echo '.'; sleep 5 ; done"]
+    command: ["/bin/bash", "-ec", "sleep 30"]
     volumeMounts:
     - mountPath: /cache
       name: cache-volume
