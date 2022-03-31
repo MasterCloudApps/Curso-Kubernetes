@@ -3,7 +3,7 @@ kind: Ingress
 metadata:  
   name: codeurjc-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:  
   rules:
    - http:
@@ -15,8 +15,8 @@ spec:
             name: webgatos
             port:
               number: 5000      
-      - path: /webapp(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /webapp/(.*)
+        pathType: Prefix
         backend:
           service:
             name: webapp
