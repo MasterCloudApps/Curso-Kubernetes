@@ -13,9 +13,9 @@ function test() {
 
 
 HOST=$(minikube ip)
-PORT=31519
+PORT=$(kubectl get service ingress-nginx-controller -n ingress-nginx --output='jsonpath={.spec.ports[0].nodePort}')
 
-echo Testing serviceA from http://$HOST:$PORT/servicea/
+echo Testing serviceA in http://$HOST:$PORT/servicea/
 
 test "ServiceA External Ingress" "http://$HOST:$PORT/servicea/internalvalue" "{ value: 0 }"
 

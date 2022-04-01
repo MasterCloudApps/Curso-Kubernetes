@@ -207,75 +207,38 @@ ServiceB External Egress (direct): FAIL
 ServiceB External Egress (through ServiceA): OK
 ```
 
-Las conexiones que funcionaban lo siguen haciendo. No se ha hecho honor a la network policy. Para que se haga honor, hay que instalar Cilium, un Network plugin que soporta network policies.
+Las conexiones que funcionaban lo siguen haciendo. No se ha hecho honor a la network policy. Para que se haga honor, hay que instalar un network provider que lo soporte. Nosotros instalaremos [Cilium](https://cilium.io/).
 
 ### Instalar Cilium en MiniKube
 
-Instalaremos cilium en Minikube siguiendo estas instrucciones:
+Instalaremos cilium en Minikube siguiendo las [instrucciones oficiales](https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/).
 
-hhttps://docs.cilium.io/en/v1.11/gettingstarted/k8s-install-default/
+En Abril del 2022 había que seguir los siguientes pasos:
 
-Iniciamos minikube con el network plugin de tipo cilium con VirtualBox (Yo no he conseguido hacerlo funcionar con docker, el driver por defecto)
-
+* Arrancar minikube sin network provider
 ```
-minikube start --cni=cilium --memory=4096 --driver=virtualbox
+$ minikube start --network-plugin=cni --cni=false
 ```
-
-Verificamos que se ha desplegado correctamente
+* Instalar cilium CLI (en linux):
 ```
-$ kubectl get pods --namespace=kube-system
-NAME                                        READY   STATUS            RESTARTS   AGE
-cilium-nhwl7                                0/1     Running   0          31s
-...
+$ curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz{,.sha256sum}
+$ sha256sum --check cilium-linux-amd64.tar.gz.sha256sum
+$ sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+$ rm cilium-linux-amd64.tar.gz{,.sha256sum}
 ```
 
-### Instalar Cilium en Microk8s
-
-```
-$ microk8s enable cilium
-```
-
-### Instalar Cilium en Docker Desktop
-
-Parece que no se puede instalar el network plugin con cilium en Docker Desktop. Aquí el issue en el que están haciendo el tracking:
-
-https://github.com/cilium/cilium/issues/10516
-
-### Instalar cilium en k3s 
-
-Instalamos k3s en un linux con opciones para no instalar driver de red ni ingress Traefik.
-
-```
-$ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='--flannel-backend=none --disable-network-policy --no-deploy traefik ' sh -
-```
-
-Damos permisos a '/etc/rancher/k3s/k3s.yaml':
-```
-$ sudo chmod 777 /etc/rancher/k3s/k3s.yaml
-```
-
-Exportamos config del cluster:
-```
-$ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-```
-
-Instalamos cilium en k3s:
+* Instalar cilium en minikube
 
 ```
 $ cilium install
 ```
-
-Comprobamos que todo va bien
+* Verificar que funciona
 
 ```
 $ cilium status --wait
 ```
 
-Instalar nginx-controller:
-
-```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/baremetal/deploy.yaml
-```
+NOTA: Si después de instalar cilium el comportamiento del cluster kubernetes no es el esperado, probad a ejecutar minikube usando un driver que use una tecnología de virtualización (virtualbox, hyper-v, hyperkit, etc...) en vez de docker.
 
 ### Volvemos a aplicar el Deny network policy
 
@@ -285,6 +248,18 @@ Si hemos borrado el cluster y lo hemos regenerado de nuevo, tenemos que volver a
 $ kubectl apply -f kubernetes/servicea.yaml
 $ kubectl apply -f kubernetes/serviceb-deployment.yaml
 $ kubectl apply -f kubernetes/serviceb-service-cip.yaml
+```
+
+Verificamos que se sigue comportando como antes:
+
+```
+$ ./test.sh
+ServiceA External Ingress: OK
+ServiceB External Ingress: FAIL
+ServiceA External Egress: OK
+ServiceA to ServiceB: OK
+ServiceB External Egress (direct): FAIL
+ServiceB External Egress (through ServiceA): OK
 ```
 
 Desplegamos el Deny all policy:
@@ -589,24 +564,37 @@ spec:
 $ kubectl apply -f kubernetes/servicea-service-cip.yaml
 ```
 
-Ahora podemos acceder al ServicioA desde el puerto 80 (usando el ingress controller) y la ruta `http://minikube-ip/servicea/`
+Ahora podemos acceder al ServicioA usando el ingress controller. 
+
+Dependiendo de la versión de minikube y cilium es posible que se pueda acceder usando el puerto 80 o el posible que haya que usar otro puerto:
+
+Si funciona el puerto 80:
+```
+$ HOST=$(minikube ip)
+$ curl http://$HOST/servicea/info
+{ status: "ok"}
+```
+
+Si no funciona el puerto 80 hay que usar el puerto del servicio `ingress-nginx-controller` del namespace `ingress-nginx`:
+```
+$ HOST=$(minikube ip)
+$ PORT=$(kubectl get service ingress-nginx-controller -n ingress-nginx --output='jsonpath={.spec.ports[0].nodePort}')
+$ curl http://$HOST:$PORT/servicea/info
+{ status: "ok"}
+```
+
+Se ha creado un script para automatizar los tests cuando el servicio A se publica con un ingress:
 
 ```
 $ ./test-ingress.sh
-Testing serviceA from http://192.168.99.102/servicea/
+Testing serviceA from http://192.168.99.102:35345/servicea/
 ServiceA External Ingress: OK
 ServiceA External Egress: OK
 ServiceA to ServiceB: OK
 ServiceB External Egress (through ServiceA): OK
 ```
 
-En el caso de usar el ingress podemos afinar todavía más la network-policy del servicea para que sólo permita el acceso desde el Ingress (y no desde cualquier sitio):
-
-Para ello, un kubernetes previos a la versión 1.21 primero tenemos que poner una etiqueta en el namespace kube-system:
-
-```
-$ kubectl label namespace kube-system kubernetes.io/metadata.name=kube-system
-```
+En el caso de usar el ingress podemos afinar todavía más la network-policy del servicea para que sólo permita el acceso desde el pod del Ingress controller (y no desde cualquier sitio). Este pod tiene una label `app.kubernetes.io/name: ingress-nginx` y está en el namespace `ingress-nginx`.
 
 `np-servicea-ingress-ingress.yaml`
 ```
@@ -634,7 +622,7 @@ spec:
 ```
 $ kubectl apply -f kubernetes/np-servicea-ingress-ingress.yaml
 ```
-**NOTA:** Esta Network Policy es bastante frágil porque sólo funciona si el nginx-controller está en el namespace `kube-system` y tiene una label `app.kubernetes.io/name:ingress-nginx`. Por ejemplo, en minikube 1.18 si es así, pero en minikube 1.19 el nginx-controller está en otro namespace y por tanto esta política fallará.
+**NOTA:** Esta Network Policy puede dejar de funcionar si el ingress controller está en otro namespace o su label `app.kubernetes.io/name` cambia de valor.
 
 ## Más información
 
