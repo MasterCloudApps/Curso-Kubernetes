@@ -17,10 +17,9 @@ spec:
     spec:
       containers:
       - name: servicea
-        image: codeurjc/np-servicea
+        image: codeurjc/np-servicea:v1
         ports:
-        - containerPort: 5000
-        imagePullPolicy: Always
+        - containerPort: 5000        
 ---
 apiVersion: v1
 kind: Service

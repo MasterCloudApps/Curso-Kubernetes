@@ -11,9 +11,10 @@ function test() {
     fi
 }
 
+
 HOST=127.0.0.1
-SA_PORT=$(microk8s kubectl get service servicea-service --output='jsonpath={.spec.ports[0].nodePort}')
-SB_PORT=$(microk8s kubectl get service serviceb-service --output='jsonpath={.spec.ports[0].nodePort}')
+SA_PORT=$(kubectl get service servicea-service --output='jsonpath={.spec.ports[0].nodePort}')
+SB_PORT=$(kubectl get service serviceb-service --output='jsonpath={.spec.ports[0].nodePort}')
 
 echo Host: $HOST
 echo ServiceA port: $SA_PORT

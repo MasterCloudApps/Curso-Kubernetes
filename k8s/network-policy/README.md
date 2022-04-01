@@ -2,35 +2,69 @@
 
 ## Aplicación de ejemplo
 
-Usaremos una aplicación con dos microservicios sintéticos implementados en Python.
+Usaremos una aplicación con dos microservicios sintéticos implementados en Python. Esta aplicación nos permitirá ver cómo el tráfico se va restringiendo.
 
 Los servicios son:
-* ServiceA es el frontal y atiende peticiones del exterior
-* ServiceB es un servicio interno y no debería aceptar peticiones del exterior. Es usado desde el serviceA.
+* ServiceA:
+  * Es el frontal
+  * Atiende peticiones del exterior en el puerto 5000
+  * Hace peticiones a google (https://www.googleapis.com)
+  * Hace peticiones al ServiceB
+* ServiceB:
+  * Es un servicio interno
+  * No debería aceptar peticiones del exterior.
+  * Hace peticiones a google (https://www.googleapis.com)
+  * Es usado desde el serviceA.
 
-### Construcción de contenedores
+### Construcción de contenedores (opcional)
+
+Los contenedores de la aplicación están publicados en DockerHub, pero también se proporciona el código fuente por si se quieren modificar para hacer pruebas.
+
+Si se va a desplegar en minikube, se puede configurar la shell para construir las imágenes directamente en el clúster:
 
 ```
-$ docker build -t=codeurjc/np-servicea servicea/.
-$ docker build -t=codeurjc/np-serviceb serviceb/.
+eval $(minikube -p minikube docker-env)
+```
+Construcción de las imágenes:
+```
+$ docker build -t=codeurjc/np-servicea:v1 servicea/.
+$ docker build -t=codeurjc/np-serviceb:v1 serviceb/.
 ```
 
-Se puede ejecutar el servicioA en local con el comando:
+Se puede ejecutar el servicioA para probar que funciona.
+
+Si hemos conectado la shell a minikube tenemos que ejecutar el contenedor en minikube:
 
 ```
-$ docker run -p 5000:5000 codeurjc/np-servicea
+$ minikube ssh
 ```
 
+Ejecutamos el contenedor:
+```
+$ docker run --name servicea -d -p 5000:5000 codeurjc/np-servicea:v1
+```
 Y probar que funciona con
 
 ```
 $ curl http://127.0.0.1:5000/info
+{ status: "ok"}
+```
+Lo borramos:
+```
+$ docker rm -f servicea
 ```
 
-Publicamos las imágenes en DockerHub
+Si estamos en el nodo minikube, nos salimos:
+
 ```
-$ docker push codeurjc/np-servicea
-$ docker push codeurjc/np-serviceb
+$ exit
+```
+
+Si no tenemos acceso a minikube, tenemos que publicar las imágenes en un registry (por ejemplo DockerHub) para poder desplegarlas en Kubernetes. Si publicamos en DockerHub necesitamos permisos para la organización codeurjc. Si las desplegamos en otra organización, hay que cambiar el nombre de la imagen en los comandos de despliegue y los manifiestos.
+
+```
+$ docker push codeurjc/np-servicea:v1
+$ docker push codeurjc/np-serviceb:v1
 ```
 
 ### Despliegue Kubernetes
@@ -97,10 +131,13 @@ $ curl http://$HOST:$SA_PORT/servicebvalue-external
 
 ## Test automático
 
-Se ha creado un script de bash que realiza todas estas peticiones y verifica si el resultado demuestra que hay conectividad o no.
+Se ha creado un script de bash que realiza todas estas operaciones y verifica si el resultado demuestra que hay conectividad o no.
 
 ```
 $ ./test.sh
+Host: 192.168.49.2
+ServiceA port: 31698
+ServiceB port: 32755
 ServiceA External Ingress: OK
 ServiceB External Ingress: OK
 ServiceA External Egress: OK
@@ -108,6 +145,14 @@ ServiceA to ServiceB: OK
 ServiceB External Egress (direct): OK
 ServiceB External Egress (through ServiceA): OK
 ```
+
+Se ha implementado otro test específico para microk8s (por sus particularidades para obtener la IP y por la ejecución del comando `microk8s kubectl`)
+
+```
+$ ./test-microk8s.sh
+...
+```
+
 
 ## Restricción de conexiones de red
 
@@ -162,13 +207,13 @@ ServiceB External Egress (direct): FAIL
 ServiceB External Egress (through ServiceA): OK
 ```
 
-Las conexiones que funcionaban lo siguen haciendo. No se ha hecho honor a la network policy. Para que se haga honor, hay que instalar un Network plugin que soporte Network policy
+Las conexiones que funcionaban lo siguen haciendo. No se ha hecho honor a la network policy. Para que se haga honor, hay que instalar Cilium, un Network plugin que soporta network policies.
 
-### Instalar Network policy plugin en MiniKube
+### Instalar Cilium en MiniKube
 
 Instalaremos cilium en Minikube siguiendo estas instrucciones:
 
-https://docs.cilium.io/en/v1.9/gettingstarted/minikube/
+hhttps://docs.cilium.io/en/v1.11/gettingstarted/k8s-install-default/
 
 Iniciamos minikube con el network plugin de tipo cilium con VirtualBox (Yo no he conseguido hacerlo funcionar con docker, el driver por defecto)
 
@@ -184,9 +229,53 @@ cilium-nhwl7                                0/1     Running   0          31s
 ...
 ```
 
-NOTA: Parece que no se puede instalar el network plugin con cilium en Docker Desktop. Aquí el issue en el que están haciendo el tracking:
+### Instalar Cilium en Microk8s
+
+```
+$ microk8s enable cilium
+```
+
+### Instalar Cilium en Docker Desktop
+
+Parece que no se puede instalar el network plugin con cilium en Docker Desktop. Aquí el issue en el que están haciendo el tracking:
 
 https://github.com/cilium/cilium/issues/10516
+
+### Instalar cilium en k3s 
+
+Instalamos k3s en un linux con opciones para no instalar driver de red ni ingress Traefik.
+
+```
+$ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='--flannel-backend=none --disable-network-policy --no-deploy traefik ' sh -
+```
+
+Damos permisos a '/etc/rancher/k3s/k3s.yaml':
+```
+$ sudo chmod 777 /etc/rancher/k3s/k3s.yaml
+```
+
+Exportamos config del cluster:
+```
+$ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+```
+
+Instalamos cilium en k3s:
+
+```
+$ cilium install
+```
+
+Comprobamos que todo va bien
+
+```
+$ cilium status --wait
+```
+
+Instalar nginx-controller:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/baremetal/deploy.yaml
+```
 
 ### Volvemos a aplicar el Deny network policy
 

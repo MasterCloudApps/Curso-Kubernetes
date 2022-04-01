@@ -17,7 +17,6 @@ spec:
     spec:
       containers:
       - name: serviceb
-        image: codeurjc/np-serviceb:latest
+        image: codeurjc/np-serviceb:v1
         ports:
         - containerPort: 5000
-        imagePullPolicy: Always
