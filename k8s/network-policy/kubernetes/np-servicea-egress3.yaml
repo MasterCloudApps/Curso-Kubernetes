@@ -10,7 +10,10 @@ spec:
     # allow connection to www.googleapis.com > 2a00:1450:4003:801::200a
     # Note that DNS IP can change. Egress can not be configured with host names
   - toFQDNs:
-    - matchName: "www.googleapis.com"
+      - matchName: www.googleapis.com
+    toPorts:
+      - ports:
+        - port: "443"
   - toEndpoints:
     - matchLabels:
         "k8s:io.kubernetes.pod.namespace": kube-system

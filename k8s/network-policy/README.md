@@ -390,11 +390,11 @@ spec:
     matchLabels:
       app: servicea
   egress:
-    # allow connection to www.googleapis.com > 216.58.201.170
+    # allow connection to www.googleapis.com > 2a00:1450:4003:801::200a
     # Note that DNS IP can change. Egress can not be configured with host names
   - to:
     - ipBlock:
-        cidr: 216.58.201.170/32
+        cidr: 2a00:1450:4003:801::/64
     ports:
     - port: 443
       protocol: TCP
@@ -421,7 +421,10 @@ spec:
     # allow connection to www.googleapis.com > 2a00:1450:4003:801::200a
     # Note that DNS IP can change. Egress can not be configured with host names
   - toFQDNs:
-    - matchName: "www.googleapis.com"
+      - matchName: www.googleapis.com
+    toPorts:
+      - ports:
+        - port: "443"
   - toEndpoints:
     - matchLabels:
         "k8s:io.kubernetes.pod.namespace": kube-system
@@ -619,7 +622,7 @@ spec:
     - from:
       - namespaceSelector:
           matchLabels:
-            kubernetes.io/metadata.name: kube-system
+            kubernetes.io/metadata.name: ingress-nginx
         podSelector:
           matchLabels:
             app.kubernetes.io/name: ingress-nginx
