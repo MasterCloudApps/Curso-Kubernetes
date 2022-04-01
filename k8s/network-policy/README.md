@@ -328,7 +328,7 @@ $ kubectl apply -f kubernetes/np-servicea-ingress.yaml
 $ ./test.sh                          
 ServiceA External Ingress: OK
 ServiceB External Ingress: FAIL
-ServiceA External Egress: OK
+ServiceA External Egress: FAIL
 ServiceA to ServiceB: FAIL
 ServiceB External Egress (direct): FAIL
 ServiceB External Egress (through ServiceA): FAIL
