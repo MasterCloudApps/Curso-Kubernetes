@@ -1,5 +1,5 @@
 # Selecciona la imagen base
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 
 # Define el directorio de trabajo para el comando
 WORKDIR /usr/src/app/
