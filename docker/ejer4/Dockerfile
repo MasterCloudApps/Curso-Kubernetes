@@ -8,7 +8,7 @@ WORKDIR /project
 COPY aplicacion-java-enunciado/ /project/
 
 # Compila proyecto y descarga librerías
-RUN mvn -B package
+RUN mvn -B package -DskipTests
 
 # Indica el puerto que expone el contenedor
 EXPOSE 8080

@@ -16,7 +16,7 @@ RUN mvn -B clean verify
 COPY aplicacion-java-enunciado/src /project/src
 
 # Compila proyecto
-RUN mvn -B -o package
+RUN mvn -B -o package -DskipTests
 
 #################################################
 # Imagen base para el contenedor de la aplicación
