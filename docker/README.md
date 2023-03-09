@@ -4,15 +4,14 @@
 ### Instalación de Docker
 
 Windows:
-- Microsoft Windows 10 Professional or Enterprise 64-bit or Windows 10: https://store.docker.com/editions/community/docker-ce-desktop-windows 
-- Other Windows versions: https://docs.docker.com/docker-for-windows/install-windows-home/
+- Microsoft Windows 10 y 11 Home, Education, Enterprise y Pro: https://docs.docker.com/desktop/install/windows-install/
 
 Linux:
-- Ubuntu: https://store.docker.com/editions/community/docker-ce-server-ubuntu 
-- Fedora: https://store.docker.com/editions/community/docker-ce-server-fedora 
-- Debian: https://store.docker.com/editions/community/docker-ce-server-debian 
-- CentOS: https://store.docker.com/editions/community/docker-ce-server-centos 
+- Ubuntu: https://docs.docker.com/engine/install/ubuntu/
+- Fedora: https://docs.docker.com/engine/install/fedora/
+- Debian: https://docs.docker.com/engine/install/debian/
+- CentOS: https://docs.docker.com/engine/install/centos/ 
+- Docker for Desktop (Ubuntu, Debian y Fedora): https://docs.docker.com/desktop/install/linux-install/
 
 Mac:
-- Apple macOS Mojave (10.14) or newer: https://store.docker.com/editions/community/docker-ce-desktop-mac 
-- Apple M1 chip: https://docs.docker.com/docker-for-mac/apple-m1/
+- Apple macOS Big Sur (11) o superior con Intel o Apple Silicon: https://docs.docker.com/desktop/install/mac-install/
