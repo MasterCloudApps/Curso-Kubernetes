@@ -21,4 +21,5 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 5s
-      retries: 20
+      start_period: 10s
+      retries: 5
