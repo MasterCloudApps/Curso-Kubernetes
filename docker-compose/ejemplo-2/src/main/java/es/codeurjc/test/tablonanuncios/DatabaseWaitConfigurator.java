@@ -2,7 +2,7 @@ package es.codeurjc.test.tablonanuncios;
 
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
