@@ -8,8 +8,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password
     depends_on:
-      - db
-    restart: on-failure
+      db:
+        condition: service_healthy
   db:
     image: mysql:8.0
     environment:
@@ -17,3 +17,8 @@ services:
       - MYSQL_DATABASE=test
     volumes:
       - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 20

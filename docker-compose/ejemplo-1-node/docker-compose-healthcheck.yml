@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      - MONGODB_HOST=db
+      - MONGODB_PORT=27017
+      - MONGODB_COLLECTION=posts
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mongo:5.0-focal
+    volumes:
+      - ./mongo:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 5

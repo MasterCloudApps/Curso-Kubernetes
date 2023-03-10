@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   web:
     build: .
@@ -10,6 +9,6 @@ services:
     depends_on:
         - db
   db:
-    image: mongo:5.0.6-focal
+    image: mongo:5.0-focal
     volumes:
       - ./mongo:/data/db

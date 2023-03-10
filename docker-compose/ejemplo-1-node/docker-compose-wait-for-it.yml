@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   web:
     build:
@@ -14,6 +13,6 @@ services:
       - db
     command: ["./wait-for-it.sh", "db:27017", "--", "node", "src/server.js"]
   db:
-    image: mongo:5.0.6-focal
+    image: mongo:5.0-focal
     volumes:
       - ./mongo:/data/db

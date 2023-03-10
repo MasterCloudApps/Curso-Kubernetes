@@ -1,4 +1,3 @@
-version: "3.9"
 services: 
   web:
     build: 
@@ -10,9 +9,11 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db/test
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - db
     command: ["./wait-for-it.sh", "db:3306", "--", "java", "-jar", "app.jar"]
   db:
-    image: mysql:8.0.28
+    image: mysql:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=test
