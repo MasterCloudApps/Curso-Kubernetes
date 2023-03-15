@@ -27,10 +27,7 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /usr/src/app/
 
 # Descargamos el script wait-for-it.sh
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -LJO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
+RUN curl -LJO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
     && chmod +x /usr/src/app/wait-for-it.sh
 
 # Copia el JAR del contenedor de compilación
