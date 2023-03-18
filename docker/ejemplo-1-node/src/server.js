@@ -23,15 +23,17 @@ app.set('views', __dirname + '/views');
 app.engine('html', mustacheExpress());
 
 app.get('/', function (req, res) {
+    const hostIP = req.socket.localAddress;
     let image = images[Math.floor(Math.random() * images.length)];
-    res.render('index', { url: image });
+
+    res.render('index', { url: image, ip: hostIP });
 });
 
 process.on('SIGINT', () => {
     process.exit(0);
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
     console.log(`* Running on http://localhost:${port}/`);
     console.log("  (Press CTRL+C to quit)");
 });
