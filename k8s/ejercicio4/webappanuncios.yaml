@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webappanuncios
+spec:
+  selector:
+    matchLabels:
+      app: webappanuncios
+  template:
+    metadata:
+      labels:
+        app: webappanuncios
+    spec:
+      containers:
+      - name: java
+        image: mastercloudapps/webapp-anuncios:v1.0
+        env:
+        - name: DATABASE_HOST
+          value: db
+        - name: DATABASE_PORT
+          value: "3306"
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://db/anuncios 
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webappanuncios
+spec:
+  type: LoadBalancer
+  selector:
+    app: webappanuncios
+  ports:
+  - name: webappanuncios-port
+    port: 8080
