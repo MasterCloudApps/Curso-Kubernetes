@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: webgatos
-        image: codeurjc/webgatos:v1
+        image: mastercloudapps/webgatos:v1.0
         ports:
         - containerPort: 5000
 ---
