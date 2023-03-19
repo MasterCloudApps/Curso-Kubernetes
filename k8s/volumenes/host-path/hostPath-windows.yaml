@@ -4,7 +4,7 @@ metadata:
   name: test-pd
 spec:
   containers:
-  - image: ubuntu
+  - image: ubuntu:22.04
     name: test-container
     command: ["/bin/bash", "-ec", "while :; do echo '.'; sleep 5 ; done"]
     volumeMounts:
@@ -14,5 +14,5 @@ spec:
   - name: test-volume
     # C:\pod-data
     hostPath:
-      path: /run/desktop/mnt/host/c/pod-data 
+      path: /run/desktop/mnt/host/c/pod-data
       type: Directory

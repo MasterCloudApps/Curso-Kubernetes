@@ -4,13 +4,13 @@ metadata:
   name: nginx
 spec:
   containers:
-  - image: nginx:1.19.8
+  - image: nginx:1.23
     name: nginx    
     volumeMounts:
     - mountPath: /usr/share/nginx/html
-      name: web
+      name: web-volume
   volumes:
-  - name: web
+  - name: web-volume
     hostPath:
       path: /pod-data
       type: Directory
