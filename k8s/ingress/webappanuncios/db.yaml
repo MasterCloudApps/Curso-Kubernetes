@@ -13,10 +13,10 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:5.7
+        image: mysql:8.0
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: pass
+          value: password
         - name: MYSQL_DATABASE
           value: anuncios
 ---
