@@ -1,0 +1,18 @@
+name: demoservice4-k8s
+
+dev:
+  demoservice:
+    image: maven:3.9.0-eclipse-temurin-17
+    command:
+      - mvn
+      - spring-boot:run
+    workdir: /usr/src/app
+    sync:
+      - .:/usr/src/app
+    volumes:
+      - /root/.m2
+    forward:
+      - 8080:8080
+
+deploy:
+  - kubectl apply -f k8s

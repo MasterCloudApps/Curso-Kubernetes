@@ -1,9 +1,0 @@
-name: demoservice-dply
-image: maven:3.8.1-jdk-11
-command:
-  - mvn
-  - spring-boot:run
-volumes:
-  - /root/.m2
-forward:
-  - 8080:8080
