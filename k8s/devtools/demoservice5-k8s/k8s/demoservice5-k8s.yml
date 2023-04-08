@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demoservice
+  name: demoservice5-k8s
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: demoservice
+      app: demoservice5-k8s
   replicas: 1
   template:
     metadata:
       labels:
-        app: demoservice
+        app: demoservice5-k8s
     spec:
       containers:
-      - name: demoservice
-        image: mastercloudapps/demoservice3-k8s
+      - name: demoservice5-k8s
+        image: mastercloudapps/demoservice5-k8s
         ports:
         - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: demoservice
+  name: demoservice5-k8s
   labels:
-    app: demoservice
+    app: demoservice5-k8s
 spec:
   ports:
     - port: 8080
       protocol: TCP
-      name: demoservice-port
+      name: demoservice5-k8s-port
   selector:
-    app: demoservice
+    app: demoservice5-k8s
   type: NodePort

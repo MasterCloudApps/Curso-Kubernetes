@@ -1,11 +1,9 @@
 name: demoservice6-k8s
 
 dev:
-  demoservice:
+  demoservice6-k8s:
     image: maven:3.9.0-eclipse-temurin-17
-    command:
-      - mvn
-      - spring-boot:run
+    command: [ "bash" ]
     workdir: /usr/src/app
     sync:
       - .:/usr/src/app

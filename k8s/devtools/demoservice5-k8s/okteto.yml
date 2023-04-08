@@ -1,7 +1,7 @@
-name: demoservice5-k8s
+name: demoservice5-k8s-prueba
 
 dev:
-  demoservice:
+  demoservice5-k8s:
     image: maven:3.9.0-eclipse-temurin-17
     command:
       - mvn
