@@ -1,9 +1,0 @@
-name: demoservice-dply
-command:
-  - java
-  - -cp
-  - /app/resources:/app/classes:/app/libs/*
-  - es.codeurjc.k8sdevtools.demoservice.Application
-forward:
-  - 8080:8080
-

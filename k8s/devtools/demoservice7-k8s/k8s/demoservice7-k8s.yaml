@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoservice7-k8s
+spec:
+  selector:
+    matchLabels:
+      app: demoservice7-k8s
+  template:
+    metadata:
+      labels:
+        app: demoservice7-k8s
+    spec:
+      containers:
+      - name: java
+        image: mastercloudapps/demoservice7-k8s
+        env:
+        - name: DATABASE_HOST
+          value: demoservice7-db-k8s
+        - name: DATABASE_PORT
+          value: "3306"
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://demoservice7-db-k8s/anuncios 
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demoservice7-k8s
+  labels:
+    app: demoservice7-k8s
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      name: demoservice7-k8s-port
+  selector:
+    app: demoservice7-k8s
+  type: NodePort

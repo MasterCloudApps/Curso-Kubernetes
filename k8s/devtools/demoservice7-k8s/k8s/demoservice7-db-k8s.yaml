@@ -1,0 +1,39 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: demoservice7-db-k8s
+spec:
+  selector:
+    matchLabels:
+      app: demoservice7-db-k8s
+  template:
+    metadata:
+      labels:
+        app: demoservice7-db-k8s
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_DATABASE
+          value: anuncios
+        ports:
+        - containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demoservice7-db-k8s
+  labels:
+    app: demoservice7-db-k8s
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+    protocol: TCP
+    name: demoservice7-db-k8s-port
+  selector:
+    app: demoservice7-db-k8s
+  type: ClusterIP
