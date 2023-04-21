@@ -60,3 +60,13 @@ If you want to learn more about building native executables, please consult http
 Easily start your Reactive RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+## Kubernetes
+
+### Debug service
+
+```bash
+kubectl run -it curl \
+    --image=curlimages/curl:8.00.1 \
+    --command -- /bin/sh
+```
